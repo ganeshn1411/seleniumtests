@@ -29,9 +29,9 @@ public class MMXDestinationCreate {
   public void testMMXDestinationCreate() throws Exception {
     driver.get(baseUrl+"/RequestCenter/servicecatalog/servicecatalog.do");
     driver.findElement(By.id("userInput")).clear();
-    driver.findElement(By.id("userInput")).sendKeys("jayca");
+    driver.findElement(By.id("userInput")).sendKeys("");
     driver.findElement(By.name("password")).clear();
-    driver.findElement(By.name("password")).sendKeys("Reverso131!!");
+    driver.findElement(By.name("password")).sendKeys("");
     driver.findElement(By.cssSelector("form > input[type=\"submit\"]")).click();
     Thread.sleep(30000);
     driver.findElement(By.name("q")).click();
