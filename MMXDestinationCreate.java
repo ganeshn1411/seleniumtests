@@ -29,9 +29,9 @@ public class MMXDestinationCreate {
   public void testMMXDestinationCreate() throws Exception {
     driver.get(baseUrl+"/RequestCenter/servicecatalog/servicecatalog.do");
     driver.findElement(By.id("userInput")).clear();
-    driver.findElement(By.id("userInput")).sendKeys("");
+    driver.findElement(By.id("userInput")).sendKeys("jayca");
     driver.findElement(By.name("password")).clear();
-    driver.findElement(By.name("password")).sendKeys("");
+    driver.findElement(By.name("password")).sendKeys("Reverso131!!");
     driver.findElement(By.cssSelector("form > input[type=\"submit\"]")).click();
     Thread.sleep(30000);
     driver.findElement(By.name("q")).click();
@@ -43,50 +43,63 @@ public class MMXDestinationCreate {
     }
 
     driver.findElement(By.linkText("MMX Destination - Create")).click();
-    /*for (int second = 0;; second++) {
+    for (int second = 0;; second++) {
     	if (second >= 60) fail("timeout");
     	try { if (isElementPresent(By.linkText("Order"))) break; } catch (Exception e) {}
     	Thread.sleep(1000);
-    }*/
-    waitAndSelect(By.linkText("Order"));
-    //driver.findElement(By.linkText("Order")).click();
+    }
+    //waitAndSelect(By.linkText("Order"));
+    driver.findElement(By.linkText("Order")).click();
     //waitAndSelect(By.xpath("//body/div[7]"));
     //driver.findElement(By.xpath("//body/div[7]")).click();
+    Thread.sleep(30000);
     WebElement iframe = driver.findElements(By.tagName("iframe")).get(0);
     driver.switchTo().frame(iframe);
+    //driver.switchTo().frame(driver.findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]")));
+   // driver.findElement(By.xpath("//div[@class='psc-cancel btn-gray']")).click();
+    //driver.findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]/button[@class='psc-cancel btn-gray']")).click();
     //driver.findElement(By.xpath("//body/div[7]")).click();
     //waitAndSelect(By.cssSelector("div.modal-body"));
-    waitAndSelect(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"));
+    //selectAndWait(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"));
     //waitAndSelect(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"));
     //driver.findElement(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select")).click();
     new Select(driver.findElement(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"))).selectByVisibleText("PaaS - Self Funded");
-    driver.findElement(By.cssSelector("option[value=\"PaaS - Self Funded\"]")).click();
-    waitAndSelect(By.id("PaaSMMXQDestiConfig.DestinationType"));
+    selectAndWait(By.cssSelector("option[value=\"PaaS - Self Funded\"]"));
+    Thread.sleep(15000);
+    selectAndWait(By.id("PaaSMMXQDestiConfig.DestinationType"));
+    //selectAndWait(By.id("PaaSMMXQDestiConfig.DestinationType"));
     //driver.findElement(By.id("PaaSMMXQDestiConfig.DestinationType")).click();
     new Select(driver.findElement(By.id("PaaSMMXQDestiConfig.DestinationType"))).selectByVisibleText("Queue");
-    driver.findElement(By.cssSelector("option[value=\"Queue\"]")).click();
-    driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).click();
-    driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).clear();
-    driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).sendKeys("paastes5.queue.1");
-    waitAndSelect(By.id("PaaSMMXQDestiConfig.Lifecycle.Input"));
+    //driver.findElement(By.cssSelector("option[value=\"Queue\"]")).click();
+    selectAndWait(By.id("PaaSMMXQDestiConfig.DestiName"));
+    //driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).click();
+    //driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName"));
+    //driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).clear();
+    driver.findElement(By.id("PaaSMMXQDestiConfig.DestiName")).sendKeys("paaste16.queue.1");
+    //selectAndWait(By.id("PaaSMMXAppInfo.AppName"));
+    //driver.findElement(By.id("PaaSMMXQDestiConfig.Lifecycle")).click();
+    selectAndWait(By.id("PaaSMMXQDestiConfig.Lifecycle"));
     //driver.findElement(By.id("PaaSMMXQDestiConfig.Lifecycle.Input")).click();
-    driver.findElement(By.id("PaaSMMXQDestiConfig.Lifecycle")).click();
     new Select(driver.findElement(By.id("PaaSMMXQDestiConfig.Lifecycle"))).selectByVisibleText("DEV");
-    driver.findElement(By.cssSelector("option[value=\"DEV\"]")).click();
-    Thread.sleep(30000);
-    if(isAlertPresent()) {
-    	assertEquals("Currently Environment Freeze is enforced, it is recommended not to make any changes during this period in dev lifecycle. \nAs a Webmaster you are exempted from this freeze, if you have necessary management approval you can proceed with the changes.", closeAlertAndGetItsText());
+    selectAndWait(By.cssSelector("option[value=\"DEV\"]"));
+    //driver.findElement(By.cssSelector("option[value=\"DEV\"]")).click();
+    for(int second=0;second<60;second++) {
+    	Thread.sleep(1000);
+    	if(isAlertPresent()) {
+    		assertEquals("Currently Environment Freeze is enforced, it is recommended not to make any changes during this period in dev lifecycle. \nAs a Webmaster you are exempted from this freeze, if you have necessary management approval you can proceed with the changes.", closeAlertAndGetItsText());
+    		break;
+    	}
     }
     driver.findElement(By.id("PaaSMMXQDestiConfig.MaximumMessageSize")).click();
     new Select(driver.findElement(By.id("PaaSMMXQDestiConfig.MaximumMessageSize"))).selectByVisibleText("ExtraLarge (Between 4MB to 20MB)");
     driver.findElement(By.cssSelector("option[value=\"Standard (Less than 600KB)\"]")).click();
     driver.findElement(By.id("PaaSMMXAppInfo.AppName")).click();
     driver.findElement(By.id("PaaSMMXAppInfo.AppName")).clear();
-    driver.findElement(By.id("PaaSMMXAppInfo.AppName")).sendKeys("paastes5");
+    driver.findElement(By.id("PaaSMMXAppInfo.AppName")).sendKeys("paastes16");
     driver.findElement(By.id("PaaSAccessControlMgmt.GroupMailerAlias")).click();
     driver.findElement(By.id("PaaSAccessControlMgmt.GroupMailerAlias")).clear();
     driver.findElement(By.id("PaaSAccessControlMgmt.GroupMailerAlias")).sendKeys("paas-dev-errors");
-    waitAndSelect(By.id("PaaSMMXAppInfo.AppEnvironment"));
+    selectAndWait(By.id("PaaSMMXAppInfo.AppEnvironment"));
     //driver.findElement(By.id("PaaSMMXAppInfo.AppEnvironment")).click();
     new Select(driver.findElement(By.id("PaaSMMXAppInfo.AppEnvironment"))).selectByVisibleText("OTHERS");
     driver.findElement(By.cssSelector("option[value=\"OTHERS\"]")).click();
@@ -100,12 +113,13 @@ public class MMXDestinationCreate {
     driver.findElement(By.id("PaaSFreezeWaiverSIDB.Reference")).click();
     driver.findElement(By.id("PaaSFreezeWaiverSIDB.Reference")).clear();
     driver.findElement(By.id("PaaSFreezeWaiverSIDB.Reference")).sendKeys("INC");
-    driver.findElement(By.id("btnOrderSubmit")).click();
+    driver.findElement(By.id("PaaSFreezeWaiverSIDB.Reference")).submit();
+    //driver.findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]/button[2]")).click();
   }
 
   @After
   public void tearDown() throws Exception {
-    driver.quit();
+    //driver.quit();
     String verificationErrorString = verificationErrors.toString();
     if (!"".equals(verificationErrorString)) {
       fail(verificationErrorString);
@@ -145,8 +159,8 @@ public class MMXDestinationCreate {
     }
   }
   
-  private void waitAndSelect(By element) throws InterruptedException {
+  private void selectAndWait(By element) throws InterruptedException {
+	  driver.findElement(element).click();
 	  Thread.sleep(15000);
-	  driver.findElement(element).click();	  
   }
 }
