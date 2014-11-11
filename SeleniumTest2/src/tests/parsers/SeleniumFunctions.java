@@ -2,6 +2,8 @@ package tests.parsers;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public class SeleniumFunctions {
 	public static void selectAndWait(String path, String method, WebDriver driver) throws InterruptedException {
@@ -21,7 +23,24 @@ public class SeleniumFunctions {
 			return By.name(path);
 		}else if (method.equalsIgnoreCase("linkText")) {
 			return By.linkText(path);
+		}else if (method.equalsIgnoreCase("xpath")) {
+			return By.xpath(path);
 		}
 		return null;
+	}
+
+	public static void selectByVisibleText(String path, WebElement element) {
+		new Select(element).selectByVisibleText(path);
+		
+	}
+
+	public static WebElement getWebElement(String path, String method, WebDriver driver) {
+		By by = getByObject(method, path);
+		return driver.findElement(by);
+	}
+
+	public static void sendkeys(String path, String method, String action, String data, WebDriver driver) {
+		By by = getByObject(method, path);
+		driver.findElement(by).sendKeys(data);
 	}
 }
