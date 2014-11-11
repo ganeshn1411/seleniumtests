@@ -1,5 +1,6 @@
 package tests.selenium;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
@@ -14,12 +15,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
 import tests.parsers.ExcelReader;
+import tests.parsers.SeleniumActions;
 
 public class EstoreOrder {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
+  Map<String, List<String>> xlsValues;
 
   @Before
   public void setUp() throws Exception {
@@ -31,36 +34,41 @@ public class EstoreOrder {
   @Test
   public void testEstoreOrder() throws Exception {
 	String service = "mmx";
-	Map<String, String> credentials = ExcelReader.readWorkBook("bin/tests/excels/credentials.xls", ExcelReader.getSheets("bin/tests/excels/credentials.xls")[0]);
-	String userName = credentials.get("user");
-	String password = credentials.get("password");
+	List<String> values;
+ 	xlsValues = ExcelReader.readWorkBook("bin/tests/excels/credentials.xls", ExcelReader.getSheets("bin/tests/excels/credentials.xls")[0]);
+	String userName = xlsValues.get("user").get(0);
+	String password = xlsValues.get("password").get(0);
 	String[] sheets = ExcelReader.getSheets("bin/tests/excels/"+service+".xls");
 	for(String sheetName : sheets){
-		Map<String, String> serviceDetails = ExcelReader.readWorkBook("bin/tests/excels/"+service+".xls", sheetName);
-		String estoreService = serviceDetails.get("estoreOrder");
-		String handler = serviceDetails.get("handlerClass");
+		xlsValues = ExcelReader.readWorkBook("bin/tests/excels/"+service+".xls", sheetName);
+		String estoreService = xlsValues.get("estoreOrder").get(0);
+		String handler = xlsValues.get("handlerClass").get(0);
 		driver.get(baseUrl+"/RequestCenter/servicecatalog/servicecatalog.do");
+		xlsValues = ExcelReader.readWorkBook("bin/tests/excels/estoreOrders.xls", ExcelReader.getSheets("bin/tests/excels/estoreOrders.xls")[0]);
 		driver.findElement(By.id("userInput")).clear();
 		driver.findElement(By.id("userInput")).sendKeys(userName);
 		driver.findElement(By.name("password")).clear();
 		driver.findElement(By.name("password")).sendKeys(password);
 		driver.findElement(By.cssSelector("form > input[type=\"submit\"]")).click();
 		Thread.sleep(30000);
-	    driver.findElement(By.name("q")).click();
+		values = xlsValues.get("1");
+	    SeleniumActions.doAction(values, driver);
 	    driver.findElement(By.name("q")).sendKeys(service + Keys.ENTER);
 	    for (int second = 0;; second++) {
 	    	if (second >= 60) fail("timeout");
 	    	try { if (isElementPresent(By.linkText(estoreService))) break; } catch (Exception e) {}
 	    	Thread.sleep(1000);
 	    }
-	
+	    values = xlsValues.get("2");
+	    //SeleniumActions.doAction(values.get(0), values.get(1), values.get(2), driver);
 	    driver.findElement(By.linkText(estoreService)).click();
 	    for (int second = 0;; second++) {
 	    	if (second >= 60) fail("timeout");
 	    	try { if (isElementPresent(By.linkText("Order"))) break; } catch (Exception e) {}
 	    	Thread.sleep(1000);
 	    }
-	    driver.findElement(By.linkText("Order")).click();
+	    SeleniumActions.doAction(values, driver);
+	    //driver.findElement(By.linkText("Order")).click();
 	    Thread.sleep(30000);
 	    WebElement iframe = driver.findElements(By.tagName("iframe")).get(0);
 	    WebElement form = driver.findElement(By.id("psc-order-form-modal"));
