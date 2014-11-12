@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class SeleniumActions {
-	public static WebElement element;
+	//public static WebElement element;
 	public static boolean status = false;
 	
 	public static void doAction(List<String> values, WebDriver driver) throws InterruptedException {
@@ -19,9 +19,8 @@ public class SeleniumActions {
 		}else if(action.equalsIgnoreCase("selectAndWait")) {
 			SeleniumFunctions.selectAndWait(path, method, driver);
 		}else if (action.equalsIgnoreCase("selectByVisibleText")) {
-			SeleniumFunctions.selectByVisibleText(path, element);
-		}else if (action.isEmpty()) {
-			element = SeleniumFunctions.getWebElement(path, method, driver);
+			String text = values.get(3);
+			SeleniumFunctions.selectByVisibleText(path, method, text, driver);
 		}else if (action.equalsIgnoreCase("sendKeys")) {
 			String data = values.get(3);
 			SeleniumFunctions.sendkeys(path, method, action, data, driver);

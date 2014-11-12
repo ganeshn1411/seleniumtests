@@ -31,7 +31,8 @@ public class SeleniumFunctions {
 		return null;
 	}
 
-	public static void selectByVisibleText(String path, WebElement element) {
+	public static void selectByVisibleText(String path, String method, String text, WebDriver driver) {
+		WebElement element = getWebElement(path, method, driver);
 		new Select(element).selectByVisibleText(path);
 		
 	}
