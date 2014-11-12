@@ -1,15 +1,27 @@
 package tests.selenium;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import jxl.read.biff.BiffException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import tests.parsers.ExcelReader;
+import tests.parsers.SeleniumActions;
+
 public class MMXDestinationCreate implements Order {
 	private WebDriver driver;
-	public void estoreOrder(WebDriver drvr) throws InterruptedException {
+	public void estoreOrder(WebDriver drvr) throws InterruptedException, BiffException, IOException {
 		this.driver = drvr;
-		new Select(driver.findElement(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"))).selectByVisibleText("PaaS - Self Funded");
+		/*new Select(driver.findElement(By.xpath("//span[@id='ProjectAccount.SelectProjectAccount.Value']/select"))).selectByVisibleText("PaaS - Self Funded");
 	    selectAndWait(By.cssSelector("option[value=\"PaaS - Self Funded\"]"));
 	    Thread.sleep(15000);
 	    //selectAndWait(By.id("PaaSMMXQDestiConfig.DestinationType"));
@@ -35,7 +47,7 @@ public class MMXDestinationCreate implements Order {
 	    		assertEquals("Currently Environment Freeze is enforced, it is recommended not to make any changes during this period in dev lifecycle. \nAs a Webmaster you are exempted from this freeze, if you have necessary management approval you can proceed with the changes.", closeAlertAndGetItsText());
 	    		break;
 	    	}
-	    }*/
+	    }
 	    //driver.findElement(By.id("PaaSMMXQDestiConfig.MaximumMessageSize")).click();
 	    new Select(driver.findElement(By.id("PaaSMMXQDestiConfig.MaximumMessageSize"))).selectByVisibleText("Standard (Less than 600KB)");
 	    driver.findElement(By.cssSelector("option[value=\"Standard (Less than 600KB)\"]")).click();
@@ -70,7 +82,23 @@ public class MMXDestinationCreate implements Order {
 	    //driver.findElement(By.id("PaaSAccessControlMgmt.AdminUsersADGrp")).submit();
 	    //iframe.submit();
 	   
-	    //driver.findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]/button[2]")).click();
+	    //driver.findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]/button[2]")).click(); */
+		
+		 Map<String, List<String>> xlsValues;
+		 List<String> values;
+		 List<Long> names = new ArrayList<Long>();
+		 xlsValues = ExcelReader.readWorkBook("bin/tests/excels/DestinationCreate.xls", ExcelReader.getSheets("bin/tests/excels/DestinationCreate.xls")[0]);
+		 for (String key : xlsValues.keySet()) {
+			 names.add(Long.parseLong(key));
+		 }
+		 
+		 Collections.sort(names);
+		 System.out.println(names);
+		 Iterator<Long> itr = names.iterator();
+		 while(itr.hasNext()) {
+			 values = xlsValues.get(Long.toString(itr.next()));
+			 SeleniumActions.doAction(values, driver);
+		 }
 	}
 	
 	private void selectAndWait(By element) throws InterruptedException {

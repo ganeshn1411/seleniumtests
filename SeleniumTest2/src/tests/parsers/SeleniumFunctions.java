@@ -16,7 +16,7 @@ public class SeleniumFunctions {
 		driver.findElement(by).click();
 	}
 
-	private static By getByObject(String method, String path) {
+	public static By getByObject(String method, String path) {
 		if (method.equalsIgnoreCase("id")) {
 			return By.id(path);
 		}else if (method.equalsIgnoreCase("name")) {
@@ -25,6 +25,8 @@ public class SeleniumFunctions {
 			return By.linkText(path);
 		}else if (method.equalsIgnoreCase("xpath")) {
 			return By.xpath(path);
+		}else if (method.equalsIgnoreCase("cssSelector")) {
+			return By.cssSelector(path);
 		}
 		return null;
 	}

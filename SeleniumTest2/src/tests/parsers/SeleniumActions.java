@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 
 public class SeleniumActions {
 	public static WebElement element;
+	public static boolean status = false;
 	
 	public static void doAction(List<String> values, WebDriver driver) throws InterruptedException {
 		String path = values.get(0);
@@ -24,6 +25,16 @@ public class SeleniumActions {
 		}else if (action.equalsIgnoreCase("sendKeys")) {
 			String data = values.get(3);
 			SeleniumFunctions.sendkeys(path, method, action, data, driver);
+		}else if (action.equalsIgnoreCase("check")) {
+			String checkMethod = values.get(3);
+			if(checkMethod.equalsIgnoreCase("isDisplayed")) {
+				if(driver.findElement(SeleniumFunctions.getByObject(method, path)).isDisplayed()) {
+					status = true;
+				}
+			}else if(status) {
+				values.remove(action);
+				doAction(values, driver);
+			}
 		}
 	}
 }
