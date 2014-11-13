@@ -46,4 +46,9 @@ public class SeleniumFunctions {
 		By by = getByObject(method, path);
 		driver.findElement(by).sendKeys(data);
 	}
+	
+	public static void clear(String path, String method, WebDriver driver) {
+		By by = getByObject(method, path);
+		driver.findElement(by).clear();
+	}
 }

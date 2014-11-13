@@ -34,6 +34,8 @@ public class SeleniumActions {
 				values.remove(action);
 				doAction(values, driver);
 			}
+		}else if (action.equalsIgnoreCase("clear")) {
+			SeleniumFunctions.clear(path, method, driver);
 		}
 	}
 }
