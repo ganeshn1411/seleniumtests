@@ -1,9 +1,15 @@
 package tests.selenium;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
+
+import jxl.read.biff.BiffException;
 
 import org.junit.*;
 
@@ -32,8 +38,7 @@ public class EstoreOrder {
   }
 
   @Test
-  public void testEstoreOrder() throws Exception {
-	String service = "mmx";
+  public void testEstoreOrder(String service) throws Exception {
 	List<String> values;
  	xlsValues = ExcelReader.readWorkBook("bin/tests/excels/credentials.xls", ExcelReader.getSheets("bin/tests/excels/credentials.xls")[0]);
 	String userName = xlsValues.get("user").get(0);
@@ -53,7 +58,7 @@ public class EstoreOrder {
 		Thread.sleep(30000);
 		values = xlsValues.get("1");
 	    SeleniumActions.doAction(values, driver);
-	    driver.findElement(By.name("q")).sendKeys(service + Keys.ENTER);
+	    driver.findElement(By.name("q")).sendKeys(estoreService + Keys.ENTER);
 	    for (int second = 0;; second++) {
 	    	if (second >= 60) fail("timeout");
 	    	try { if (isElementPresent(By.linkText(estoreService))) break; } catch (Exception e) {}
@@ -73,9 +78,9 @@ public class EstoreOrder {
 	    WebElement iframe = driver.findElements(By.tagName("iframe")).get(0);
 	    WebElement form = driver.findElement(By.id("psc-order-form-modal"));
 	    driver.switchTo().frame(iframe);
-	    Class<?> handlerClass = Class.forName("tests.selenium."+handler);
-	    Order order = (Order)handlerClass.newInstance();
-	    order.estoreOrder(driver);
+	    //Class<?> handlerClass = Class.forName("tests.selenium."+handler);
+	    //Order order = (Order)handlerClass.newInstance();
+	    estoreOrder(sheetName);
 	    driver.switchTo().parentFrame().findElement(By.xpath("//div[@id='psc-order-form-modal']/div[3]/button[2]")).click();
 	}   
   }
@@ -89,6 +94,26 @@ public class EstoreOrder {
     }
   }
 
+  
+  public void estoreOrder(String xlsFile) throws BiffException, IOException, InterruptedException {
+	  Map<String, List<String>> serviceXLSValues;
+		 List<String> values;
+		 List<Long> names = new ArrayList<Long>();
+		 String[] sheetNames = ExcelReader.getSheets("bin/tests/excels/"+xlsFile+".xls");
+		 for (String sheetName : sheetNames) {
+			 serviceXLSValues = ExcelReader.readWorkBook("bin/tests/excels/"+xlsFile+".xls", sheetName);
+			 for (String key : serviceXLSValues.keySet()) {
+				 names.add(Long.parseLong(key));
+			 }
+		 	 Collections.sort(names);
+		 	 System.out.println(names);
+		 	 Iterator<Long> itr = names.iterator();
+		 	 while(itr.hasNext()) {
+		 		 values = xlsValues.get(Long.toString(itr.next()));
+		 		 SeleniumActions.doAction(values, driver);
+		 	 }
+		 }
+  }
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);

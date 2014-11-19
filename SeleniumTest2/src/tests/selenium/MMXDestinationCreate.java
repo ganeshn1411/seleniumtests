@@ -87,7 +87,7 @@ public class MMXDestinationCreate implements Order {
 		 Map<String, List<String>> xlsValues;
 		 List<String> values;
 		 List<Long> names = new ArrayList<Long>();
-		 xlsValues = ExcelReader.readWorkBook("bin/tests/excels/DestinationCreate.xls", ExcelReader.getSheets("bin/tests/excels/DestinationCreate.xls")[0]);
+		 xlsValues = ExcelReader.readWorkBook("bin/tests/excels/BPMCreate.xls", ExcelReader.getSheets("bin/tests/excels/BPMCreate.xls")[0]);
 		 for (String key : xlsValues.keySet()) {
 			 names.add(Long.parseLong(key));
 		 }
